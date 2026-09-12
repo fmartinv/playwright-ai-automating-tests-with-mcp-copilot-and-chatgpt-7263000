@@ -25,3 +25,6 @@ test-results/
 /playwright/.auth/
 .playwright-mcp
 .playwright-cli
+# Playwright artifacts
+playwright/videos/
+playwright/screenshots/
