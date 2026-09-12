@@ -30,7 +30,8 @@ export function LoginPage() {
       const data = (await res.json().catch(() => ({}))) as LoginErrorBody;
 
       if (res.ok) {
-        const name = (data as { username?: string }).username ?? username.trim();
+        const name =
+          (data as { username?: string }).username ?? username.trim();
         login(name);
         navigate("/board", { replace: true });
         return;

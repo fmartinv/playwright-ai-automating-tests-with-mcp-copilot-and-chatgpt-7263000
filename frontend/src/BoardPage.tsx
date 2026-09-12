@@ -53,7 +53,11 @@ function titleMatchesSearch(title: string, query: string): boolean {
   return nTitle.includes(nQuery);
 }
 
-function sortBugs(bugs: BugRow[], column: SortColumn, direction: SortDirection): BugRow[] {
+function sortBugs(
+  bugs: BugRow[],
+  column: SortColumn,
+  direction: SortDirection
+): BugRow[] {
   const sorted = [...bugs];
   sorted.sort((a, b) => {
     let cmp = 0;
@@ -93,7 +97,8 @@ export function BoardPage() {
   );
 
   const filteredBugs = useMemo(
-    () => bugsByState.filter((bug) => titleMatchesSearch(bug.title, searchQuery)),
+    () =>
+      bugsByState.filter((bug) => titleMatchesSearch(bug.title, searchQuery)),
     [bugsByState, searchQuery]
   );
 
@@ -189,51 +194,119 @@ export function BoardPage() {
               <table className="w-full text-left" aria-label="Bugs">
                 <thead>
                   <tr className="border-b border-stone-200 bg-stone-50/80 text-stone-600 text-sm font-medium uppercase tracking-wide">
-                    <th className="px-4 py-3 w-20" scope="col" aria-sort={sortColumn === "id" ? (sortDirection === "asc" ? "ascending" : "descending") : undefined}>
+                    <th
+                      className="px-4 py-3 w-20"
+                      scope="col"
+                      aria-sort={
+                        sortColumn === "id"
+                          ? sortDirection === "asc"
+                            ? "ascending"
+                            : "descending"
+                          : undefined
+                      }
+                    >
                       <button
                         type="button"
                         onClick={() => handleSortHeader("id")}
                         className="flex items-center gap-1 hover:text-stone-800 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 rounded"
                       >
                         ID
-                        <span className="inline-block w-4 text-center" aria-hidden="true">
-                          {sortColumn === "id" ? (sortDirection === "asc" ? "↑" : "↓") : "\u00A0"}
+                        <span
+                          className="inline-block w-4 text-center"
+                          aria-hidden="true"
+                        >
+                          {sortColumn === "id"
+                            ? sortDirection === "asc"
+                              ? "↑"
+                              : "↓"
+                            : "\u00A0"}
                         </span>
                       </button>
                     </th>
-                    <th className="px-4 py-3 w-24" scope="col" aria-sort={sortColumn === "severity" ? (sortDirection === "asc" ? "ascending" : "descending") : undefined}>
+                    <th
+                      className="px-4 py-3 w-24"
+                      scope="col"
+                      aria-sort={
+                        sortColumn === "severity"
+                          ? sortDirection === "asc"
+                            ? "ascending"
+                            : "descending"
+                          : undefined
+                      }
+                    >
                       <button
                         type="button"
                         onClick={() => handleSortHeader("severity")}
                         className="flex items-center gap-1 hover:text-stone-800 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 rounded"
                       >
                         Severity
-                        <span className="inline-block w-4 text-center" aria-hidden="true">
-                          {sortColumn === "severity" ? (sortDirection === "asc" ? "↑" : "↓") : "\u00A0"}
+                        <span
+                          className="inline-block w-4 text-center"
+                          aria-hidden="true"
+                        >
+                          {sortColumn === "severity"
+                            ? sortDirection === "asc"
+                              ? "↑"
+                              : "↓"
+                            : "\u00A0"}
                         </span>
                       </button>
                     </th>
-                    <th className="px-4 py-3" scope="col" aria-sort={sortColumn === "title" ? (sortDirection === "asc" ? "ascending" : "descending") : undefined}>
+                    <th
+                      className="px-4 py-3"
+                      scope="col"
+                      aria-sort={
+                        sortColumn === "title"
+                          ? sortDirection === "asc"
+                            ? "ascending"
+                            : "descending"
+                          : undefined
+                      }
+                    >
                       <button
                         type="button"
                         onClick={() => handleSortHeader("title")}
                         className="flex items-center gap-1 hover:text-stone-800 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 rounded"
                       >
                         Title
-                        <span className="inline-block w-4 text-center" aria-hidden="true">
-                          {sortColumn === "title" ? (sortDirection === "asc" ? "↑" : "↓") : "\u00A0"}
+                        <span
+                          className="inline-block w-4 text-center"
+                          aria-hidden="true"
+                        >
+                          {sortColumn === "title"
+                            ? sortDirection === "asc"
+                              ? "↑"
+                              : "↓"
+                            : "\u00A0"}
                         </span>
                       </button>
                     </th>
-                    <th className="px-4 py-3 w-40" scope="col" aria-sort={sortColumn === "owner" ? (sortDirection === "asc" ? "ascending" : "descending") : undefined}>
+                    <th
+                      className="px-4 py-3 w-40"
+                      scope="col"
+                      aria-sort={
+                        sortColumn === "owner"
+                          ? sortDirection === "asc"
+                            ? "ascending"
+                            : "descending"
+                          : undefined
+                      }
+                    >
                       <button
                         type="button"
                         onClick={() => handleSortHeader("owner")}
                         className="flex items-center gap-1 hover:text-stone-800 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 rounded"
                       >
                         Owner
-                        <span className="inline-block w-4 text-center" aria-hidden="true">
-                          {sortColumn === "owner" ? (sortDirection === "asc" ? "↑" : "↓") : "\u00A0"}
+                        <span
+                          className="inline-block w-4 text-center"
+                          aria-hidden="true"
+                        >
+                          {sortColumn === "owner"
+                            ? sortDirection === "asc"
+                              ? "↑"
+                              : "↓"
+                            : "\u00A0"}
                         </span>
                       </button>
                     </th>
@@ -242,19 +315,28 @@ export function BoardPage() {
                 <tbody>
                   {loading ? (
                     <tr>
-                      <td colSpan={4} className="px-4 py-6 text-center text-stone-500">
+                      <td
+                        colSpan={4}
+                        className="px-4 py-6 text-center text-stone-500"
+                      >
                         Loading…
                       </td>
                     </tr>
                   ) : sortedBugs.length === 0 && bugs.length > 0 ? (
                     <tr>
-                      <td colSpan={4} className="px-4 py-6 text-center text-stone-500">
+                      <td
+                        colSpan={4}
+                        className="px-4 py-6 text-center text-stone-500"
+                      >
                         No bugs matched.
                       </td>
                     </tr>
                   ) : sortedBugs.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="px-4 py-6 text-center text-stone-500">
+                      <td
+                        colSpan={4}
+                        className="px-4 py-6 text-center text-stone-500"
+                      >
                         No bugs.
                       </td>
                     </tr>
@@ -273,7 +355,9 @@ export function BoardPage() {
                         }}
                         className="border-b border-stone-100 hover:bg-stone-50/80 transition-colors cursor-pointer"
                       >
-                        <td className="px-4 py-3 text-stone-500 font-mono text-sm">{bug.id}</td>
+                        <td className="px-4 py-3 text-stone-500 font-mono text-sm">
+                          {bug.id}
+                        </td>
                         <td className="px-4 py-3">
                           <span
                             className={`severity-badge ${severityBadgeClass(bug.severity)}`}
@@ -282,8 +366,12 @@ export function BoardPage() {
                             {bug.severity.toUpperCase()}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-stone-800">{bug.title}</td>
-                        <td className="px-4 py-3 text-stone-600">{bug.owner}</td>
+                        <td className="px-4 py-3 text-stone-800">
+                          {bug.title}
+                        </td>
+                        <td className="px-4 py-3 text-stone-600">
+                          {bug.owner}
+                        </td>
                       </tr>
                     ))
                   )}

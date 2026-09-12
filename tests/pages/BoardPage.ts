@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 export class BoardPage {
   readonly page: Page;
@@ -9,14 +9,16 @@ export class BoardPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.newBugButton = page.getByRole('button', { name: 'New Bug' });
-    this.searchInput = page.getByRole('search', { name: 'Search bugs by title' });
-    this.clearSearchButton = page.getByRole('button', { name: 'Clear search' });
+    this.newBugButton = page.getByRole("button", { name: "New Bug" });
+    this.searchInput = page.getByRole("search", {
+      name: "Search bugs by title",
+    });
+    this.clearSearchButton = page.getByRole("button", { name: "Clear search" });
     this.bugsTable = page.locator('table[aria-label="Bugs"]');
   }
 
   async goto() {
-    await this.page.goto('/board');
+    await this.page.goto("/board");
   }
 
   async clickNewBugButton() {
@@ -32,7 +34,9 @@ export class BoardPage {
   }
 
   async getBugRowByTitle(title: string): Promise<Locator> {
-    return this.page.locator('table[aria-label="Bugs"] tbody tr', { hasText: title }).first();
+    return this.page
+      .locator('table[aria-label="Bugs"] tbody tr', { hasText: title })
+      .first();
   }
 
   async clickBugByTitle(title: string) {
@@ -41,10 +45,13 @@ export class BoardPage {
   }
 
   async getBugCellByTitle(title: string): Promise<Locator> {
-    return this.page.getByRole('cell', { name: title, exact: true });
+    return this.page.getByRole("cell", { name: title, exact: true });
   }
 
   async getNoResultsMessage(): Promise<Locator> {
-    return this.page.getByRole('cell', { name: 'No bugs matched.', exact: true });
+    return this.page.getByRole("cell", {
+      name: "No bugs matched.",
+      exact: true,
+    });
   }
 }

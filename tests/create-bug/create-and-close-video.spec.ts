@@ -1,12 +1,14 @@
-import { test, expect } from '@playwright/test';
-import { mkdirSync, readFileSync, existsSync } from 'fs';
-import { join } from 'path';
-import { LoginPage } from '../pages/LoginPage';
-import { BoardPage } from '../pages/BoardPage';
-import { CreateBugModal } from '../pages/CreateBugModal';
+import { test, expect } from "@playwright/test";
+import { mkdirSync, readFileSync, existsSync } from "fs";
+import { join } from "path";
+import { LoginPage } from "../pages/LoginPage";
+import { BoardPage } from "../pages/BoardPage";
+import { CreateBugModal } from "../pages/CreateBugModal";
 
-test('create a bug then edit it to Closed and record a video', async ({ browser }, testInfo) => {
-  const videosDir = join(process.cwd(), 'playwright-videos');
+test("create a bug then edit it to Closed and record a video", async ({
+  browser,
+}, testInfo) => {
+  const videosDir = join(process.cwd(), "playwright-videos");
   mkdirSync(videosDir, { recursive: true });
 
   const context = await browser.newContext({
@@ -15,9 +17,12 @@ test('create a bug then edit it to Closed and record a video', async ({ browser 
   const page = await context.newPage();
 
   // Read credentials from users.json
-  const usersPath = join(process.cwd(), 'users.json');
-  const usersRaw = readFileSync(usersPath, 'utf-8');
-  const users = JSON.parse(usersRaw) as Array<{ username: string; password: string }>;
+  const usersPath = join(process.cwd(), "users.json");
+  const usersRaw = readFileSync(usersPath, "utf-8");
+  const users = JSON.parse(usersRaw) as Array<{
+    username: string;
+    password: string;
+  }>;
   const user = users[0];
 
   const login = new LoginPage(page);
@@ -31,9 +36,9 @@ test('create a bug then edit it to Closed and record a video', async ({ browser 
   const title = `e2e video bug ${Date.now()}`;
   await createModal.fillBugForm({
     title,
-    severity: 'mid',
+    severity: "mid",
     owner: user.username,
-    description: 'Created by automated video test',
+    description: "Created by automated video test",
   });
   await createModal.submit();
 
@@ -45,15 +50,15 @@ test('create a bug then edit it to Closed and record a video', async ({ browser 
   await page.waitForSelector('[role="dialog"]');
 
   // Change state to Closed using the edit modal select
-  const stateSelect = page.locator('#edit-bug-state');
-  await stateSelect.selectOption({ value: 'closed' });
+  const stateSelect = page.locator("#edit-bug-state");
+  await stateSelect.selectOption({ value: "closed" });
 
   // Save
-  await page.getByRole('button', { name: 'Save' }).click();
-  await page.waitForSelector('[role="dialog"]', { state: 'hidden' });
+  await page.getByRole("button", { name: "Save" }).click();
+  await page.waitForSelector('[role="dialog"]', { state: "hidden" });
 
   // Show Closed bugs
-  await page.getByRole('button', { name: 'Closed' }).click();
+  await page.getByRole("button", { name: "Closed" }).click();
   await page.waitForTimeout(500);
 
   // Close the page to finalize the video
@@ -66,5 +71,5 @@ test('create a bug then edit it to Closed and record a video', async ({ browser 
   expect(existsSync(videoPath)).toBe(true);
 
   // Log path for visibility in test output
-  console.log('Recorded video:', videoPath);
+  console.log("Recorded video:", videoPath);
 });

@@ -1,7 +1,11 @@
-import { test, expect } from '../fixtures/pages';
+import { test, expect } from "../fixtures/pages";
 
-test.describe('Create Bug - Open create-bug modal from board', () => {
-  test('should open the create-bug modal from the board page', async ({ loginPage, boardPage, createBugModal }) => {
+test.describe("Create Bug - Open create-bug modal from board", () => {
+  test("should open the create-bug modal from the board page", async ({
+    loginPage,
+    boardPage,
+    createBugModal,
+  }) => {
     // Act
     await loginPage.loginWithFirstUser();
     await boardPage.clickNewBugButton();

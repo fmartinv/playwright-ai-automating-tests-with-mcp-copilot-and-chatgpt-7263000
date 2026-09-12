@@ -14,9 +14,7 @@ function AuthenticatedRedirectToBoard() {
 
 function RootRedirect() {
   const { isAuthenticated } = useAuth();
-  return (
-    <Navigate to={isAuthenticated ? "/board" : "/login"} replace />
-  );
+  return <Navigate to={isAuthenticated ? "/board" : "/login"} replace />;
 }
 
 function App() {

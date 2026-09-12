@@ -6,7 +6,7 @@ This document establishes **core patterns** for writing maintainable, reliable P
 
 We use the **Page Object Model** pattern to encapsulate page structure and behavior, making tests readable, maintainable, and robust.
 
-**Guiding principle:** Tests should express *what* users do (business logic), not *how* the browser does it. Page objects handle the *how*.
+**Guiding principle:** Tests should express _what_ users do (business logic), not _how_ the browser does it. Page objects handle the _how_.
 
 ### Why Page Objects?
 
@@ -45,7 +45,7 @@ File naming: `<PageName>.ts` (e.g., `LoginPage.ts`, `CreateBugModal.ts`)
 
 ```typescript
 // tests/pages/LoginPage.ts
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 export class LoginPage {
   readonly page: Page;
@@ -56,25 +56,25 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.usernameInput = page.getByLabel('Username');
-    this.passwordInput = page.getByLabel('Password');
-    this.loginButton = page.getByRole('button', { name: 'Login' });
-    this.errorMessage = page.getByRole('alert');
+    this.usernameInput = page.getByLabel("Username");
+    this.passwordInput = page.getByLabel("Password");
+    this.loginButton = page.getByRole("button", { name: "Login" });
+    this.errorMessage = page.getByRole("alert");
   }
 
   async goto() {
-    await this.page.goto('/login');
+    await this.page.goto("/login");
   }
 
   async login(username: string, password: string) {
     await this.usernameInput.fill(username);
     await this.passwordInput.fill(password);
     await this.loginButton.click();
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 
   async getErrorMessage(): Promise<string> {
-    return this.errorMessage.textContent() || '';
+    return this.errorMessage.textContent() || "";
   }
 }
 ```
@@ -103,19 +103,19 @@ Use **semantic locators** in order of preference:
 ### Test Pattern: Arrange-Act-Assert
 
 ```typescript
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
+import { test, expect } from "@playwright/test";
+import { LoginPage } from "../pages/LoginPage";
 
-test('user can log in with valid credentials', async ({ page }) => {
+test("user can log in with valid credentials", async ({ page }) => {
   // Arrange
   const loginPage = new LoginPage(page);
   await loginPage.goto();
 
   // Act
-  await loginPage.login('alice', 'password123');
+  await loginPage.login("alice", "password123");
 
   // Assert
-  await expect(page).toHaveURL('/board');
+  await expect(page).toHaveURL("/board");
 });
 ```
 
@@ -123,35 +123,35 @@ Each test is **atomic** – it focuses on one behavior and does not depend on st
 
 ### Common Page Object Methods
 
-| Pattern | Purpose | Example |
-|---------|---------|---------|
-| `async goto()` | Navigate to page | `await page.goto('/login')` |
-| `async <action>()` | Perform user action | `await page.login(user, pass)` |
-| `get<Value>()` | Query/read state | `await page.getErrorMessage()` |
-| `is<State>()` | Check condition | `await page.isButtonDisabled()` |
-| `has<Element>()` | Check visibility | `await page.hasSuccessMessage()` |
+| Pattern            | Purpose             | Example                          |
+| ------------------ | ------------------- | -------------------------------- |
+| `async goto()`     | Navigate to page    | `await page.goto('/login')`      |
+| `async <action>()` | Perform user action | `await page.login(user, pass)`   |
+| `get<Value>()`     | Query/read state    | `await page.getErrorMessage()`   |
+| `is<State>()`      | Check condition     | `await page.isButtonDisabled()`  |
+| `has<Element>()`   | Check visibility    | `await page.hasSuccessMessage()` |
 
 ### Combining Page Objects (Composite Pages)
 
 When a workflow spans multiple pages, use multiple page objects in the test:
 
 ```typescript
-test('user creates a bug and views it on the board', async ({ page }) => {
+test("user creates a bug and views it on the board", async ({ page }) => {
   // Arrange
   const boardPage = new BoardPage(page);
   const modalPage = new CreateBugModal(page);
-  
+
   // Act
   await boardPage.goto();
   await boardPage.clickCreateButton();
   await modalPage.fillBugForm({
-    title: 'Login button broken',
-    severity: 'high'
+    title: "Login button broken",
+    severity: "high",
   });
   await modalPage.clickSubmit();
 
   // Assert
-  await expect(boardPage.getBugRow('Login button broken')).toBeVisible();
+  await expect(boardPage.getBugRow("Login button broken")).toBeVisible();
 });
 ```
 
@@ -169,19 +169,19 @@ export class CreateBugModal {
 
   constructor(page: Page) {
     this.page = page;
-    this.titleInput = page.getByLabel('Title');
-    this.submitButton = page.getByRole('button', { name: 'Create' });
-    this.closeButton = page.getByRole('button', { name: 'Cancel' });
+    this.titleInput = page.getByLabel("Title");
+    this.submitButton = page.getByRole("button", { name: "Create" });
+    this.closeButton = page.getByRole("button", { name: "Cancel" });
   }
 
   async fillBugForm(data: { title: string; severity: string }) {
     await this.titleInput.fill(data.title);
-    await page.getByLabel('Severity').selectOption(data.severity);
+    await page.getByLabel("Severity").selectOption(data.severity);
   }
 
   async clickSubmit() {
     await this.submitButton.click();
-    await this.page.waitForSelector('[role="dialog"]', { state: 'hidden' });
+    await this.page.waitForSelector('[role="dialog"]', { state: "hidden" });
   }
 }
 ```
@@ -206,11 +206,11 @@ Create a single fixture file under `tests/fixtures/` for all page object fixture
 
 ```typescript
 // tests/fixtures/pages.ts
-import { test as base, Page } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
-import { BoardPage } from '../pages/BoardPage';
-import { CreateBugModal } from '../pages/CreateBugModal';
-import { EditBugModal } from '../pages/EditBugModal';
+import { test as base, Page } from "@playwright/test";
+import { LoginPage } from "../pages/LoginPage";
+import { BoardPage } from "../pages/BoardPage";
+import { CreateBugModal } from "../pages/CreateBugModal";
+import { EditBugModal } from "../pages/EditBugModal";
 
 // Declare fixture types for TypeScript support
 type PagesFixtures = {
@@ -244,7 +244,7 @@ export const test = base.extend<PagesFixtures>({
   },
 });
 
-export { expect } from '@playwright/test';
+export { expect } from "@playwright/test";
 ```
 
 ### Using Page Object Fixtures in Tests
@@ -253,21 +253,22 @@ Import the custom `test` function from your fixtures file instead of `@playwrigh
 
 ```typescript
 // tests/login/login-success.spec.ts
-import { test, expect } from '../fixtures/pages';
+import { test, expect } from "../fixtures/pages";
 
-test('user can log in with valid credentials', async ({ loginPage, page }) => {
+test("user can log in with valid credentials", async ({ loginPage, page }) => {
   // Arrange
   await loginPage.goto();
 
   // Act
-  await loginPage.login('alice', 'password123');
+  await loginPage.login("alice", "password123");
 
   // Assert
-  await expect(page).toHaveURL('/board');
+  await expect(page).toHaveURL("/board");
 });
 ```
 
 Notice:
+
 - Import `test` from `../fixtures/pages`, not from `@playwright/test`
 - Destructure fixtures from test parameters: `{ loginPage, page }`
 - No manual instantiation: `const loginPage = new LoginPage(page)` ✅ Removed
@@ -279,7 +280,7 @@ Fixtures can depend on other fixtures. For example, a fixture that logs in befor
 
 ```typescript
 // tests/fixtures/pages.ts (extended)
-import { test as base } from '@playwright/test';
+import { test as base } from "@playwright/test";
 
 export const test = base.extend<PagesFixtures>({
   // ... other fixtures ...
@@ -288,8 +289,8 @@ export const test = base.extend<PagesFixtures>({
     // This fixture depends on loginPage
     // It automatically logs in before the test runs
     await loginPage.goto();
-    await loginPage.login('alice', 'password123');
-    
+    await loginPage.login("alice", "password123");
+
     const boardPage = new BoardPage(page);
     await use(boardPage);
   },
@@ -299,7 +300,7 @@ export const test = base.extend<PagesFixtures>({
 Then use it in tests:
 
 ```typescript
-test('user can create a bug from the board', async ({ boardPageLoggedIn }) => {
+test("user can create a bug from the board", async ({ boardPageLoggedIn }) => {
   // Already logged in, ready to interact with board
   await boardPageLoggedIn.clickCreateButton();
   // ...
@@ -339,7 +340,7 @@ boardPageAuthenticatedAs: async ({ page }, use, testInfo) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
   await loginPage.login(username, 'password123');
-  
+
   const boardPage = new BoardPage(page);
   await use(boardPage);
 },
@@ -359,12 +360,12 @@ createModalOpen: async ({ page, boardPage }, use) => {
 
 ### Anti-Pattern: Constructing Page Objects in Tests
 
-| ❌ Don't Do This | ✅ Do This Instead |
-|---|---|
-| `const loginPage = new LoginPage(page);` | Import from `../fixtures/pages` and request as parameter |
-| Instantiate in every test | Define once in fixture, reuse everywhere |
-| Manual cleanup in test | Fixtures handle automatic teardown |
-| Mixed import sources (`@playwright/test` + custom) | Always import `test` from `../fixtures/pages` |
+| ❌ Don't Do This                                   | ✅ Do This Instead                                       |
+| -------------------------------------------------- | -------------------------------------------------------- |
+| `const loginPage = new LoginPage(page);`           | Import from `../fixtures/pages` and request as parameter |
+| Instantiate in every test                          | Define once in fixture, reuse everywhere                 |
+| Manual cleanup in test                             | Fixtures handle automatic teardown                       |
+| Mixed import sources (`@playwright/test` + custom) | Always import `test` from `../fixtures/pages`            |
 
 ### References
 

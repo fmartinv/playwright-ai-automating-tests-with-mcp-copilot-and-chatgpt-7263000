@@ -83,12 +83,12 @@ export function EditBugModal({ bug, onClose, onSaved }: EditBugModalProps) {
 
   const initial = bug
     ? {
-      title: bug.title,
-      severity: toLowerSeverity(bug.severity),
-      state: toLowerState(bug.state),
-      owner: bug.owner,
-      description: bug.description,
-    }
+        title: bug.title,
+        severity: toLowerSeverity(bug.severity),
+        state: toLowerState(bug.state),
+        owner: bug.owner,
+        description: bug.description,
+      }
     : null;
 
   const current = {
@@ -205,7 +205,10 @@ export function EditBugModal({ bug, onClose, onSaved }: EditBugModalProps) {
       <div className="flex min-h-full items-center justify-center p-4">
         <div className="bg-white rounded-lg shadow-lg w-full max-w-lg border border-stone-200">
           <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-stone-200">
-            <h2 id="edit-bug-modal-title" className="text-lg font-semibold text-stone-800">
+            <h2
+              id="edit-bug-modal-title"
+              className="text-lg font-semibold text-stone-800"
+            >
               Edit bug #{bug.id}
             </h2>
             <button
@@ -220,7 +223,10 @@ export function EditBugModal({ bug, onClose, onSaved }: EditBugModalProps) {
           </div>
           <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4">
             <div>
-              <label htmlFor="edit-bug-id" className="block text-sm font-medium text-stone-700 mb-1">
+              <label
+                htmlFor="edit-bug-id"
+                className="block text-sm font-medium text-stone-700 mb-1"
+              >
                 ID
               </label>
               <input
@@ -233,7 +239,10 @@ export function EditBugModal({ bug, onClose, onSaved }: EditBugModalProps) {
               />
             </div>
             <div>
-              <label htmlFor="edit-bug-title" className="block text-sm font-medium text-stone-700 mb-1">
+              <label
+                htmlFor="edit-bug-title"
+                className="block text-sm font-medium text-stone-700 mb-1"
+              >
                 Title
               </label>
               <input
@@ -248,7 +257,10 @@ export function EditBugModal({ bug, onClose, onSaved }: EditBugModalProps) {
               />
             </div>
             <div>
-              <label htmlFor="edit-bug-severity" className="block text-sm font-medium text-stone-700 mb-1">
+              <label
+                htmlFor="edit-bug-severity"
+                className="block text-sm font-medium text-stone-700 mb-1"
+              >
                 Severity
               </label>
               <select
@@ -266,7 +278,10 @@ export function EditBugModal({ bug, onClose, onSaved }: EditBugModalProps) {
               </select>
             </div>
             <div>
-              <label htmlFor="edit-bug-state" className="block text-sm font-medium text-stone-700 mb-1">
+              <label
+                htmlFor="edit-bug-state"
+                className="block text-sm font-medium text-stone-700 mb-1"
+              >
                 State
               </label>
               <select
@@ -284,7 +299,10 @@ export function EditBugModal({ bug, onClose, onSaved }: EditBugModalProps) {
               </select>
             </div>
             <div>
-              <label htmlFor="edit-bug-owner" className="block text-sm font-medium text-stone-700 mb-1">
+              <label
+                htmlFor="edit-bug-owner"
+                className="block text-sm font-medium text-stone-700 mb-1"
+              >
                 Owner
               </label>
               <input
@@ -298,7 +316,10 @@ export function EditBugModal({ bug, onClose, onSaved }: EditBugModalProps) {
               />
             </div>
             <div>
-              <label htmlFor="edit-bug-description" className="block text-sm font-medium text-stone-700 mb-1">
+              <label
+                htmlFor="edit-bug-description"
+                className="block text-sm font-medium text-stone-700 mb-1"
+              >
                 Description
               </label>
               <textarea
@@ -358,12 +379,16 @@ export function EditBugModal({ bug, onClose, onSaved }: EditBugModalProps) {
           <div className="absolute inset-0 bg-stone-900/50" />
           <div className="relative bg-white rounded-lg shadow-lg w-full max-w-md border border-stone-200">
             <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-stone-200">
-              <h2 id="delete-confirmation-title" className="text-lg font-semibold text-stone-800">
+              <h2
+                id="delete-confirmation-title"
+                className="text-lg font-semibold text-stone-800"
+              >
                 Confirm delete
               </h2>
             </div>
             <div className="px-6 py-4 text-sm text-stone-700">
-              Are you sure you want to delete bug #{bug.id}? This action cannot be undone.
+              Are you sure you want to delete bug #{bug.id}? This action cannot
+              be undone.
             </div>
             <div className="flex gap-3 justify-end px-6 pb-4">
               <button

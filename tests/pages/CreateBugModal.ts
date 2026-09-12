@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 export interface BugFormData {
   title: string;
@@ -19,13 +19,13 @@ export class CreateBugModal {
 
   constructor(page: Page) {
     this.page = page;
-    this.dialog = page.getByRole('dialog', { name: 'Create bug' });
-    this.titleInput = this.dialog.getByLabel('Title');
-    this.severitySelect = this.dialog.getByLabel('Severity');
-    this.ownerInput = this.dialog.getByLabel('Owner');
-    this.descriptionInput = this.dialog.getByLabel('Description');
-    this.saveButton = this.dialog.getByRole('button', { name: 'Save' });
-    this.cancelButton = this.dialog.getByRole('button', { name: 'Cancel' });
+    this.dialog = page.getByRole("dialog", { name: "Create bug" });
+    this.titleInput = this.dialog.getByLabel("Title");
+    this.severitySelect = this.dialog.getByLabel("Severity");
+    this.ownerInput = this.dialog.getByLabel("Owner");
+    this.descriptionInput = this.dialog.getByLabel("Description");
+    this.saveButton = this.dialog.getByRole("button", { name: "Save" });
+    this.cancelButton = this.dialog.getByRole("button", { name: "Cancel" });
   }
 
   async fillBugForm(data: BugFormData) {
@@ -44,13 +44,13 @@ export class CreateBugModal {
   async submit() {
     await this.saveButton.click();
     // Wait for modal to close
-    await this.page.waitForSelector('[role="dialog"]', { state: 'hidden' });
+    await this.page.waitForSelector('[role="dialog"]', { state: "hidden" });
   }
 
   async cancel() {
     await this.cancelButton.click();
     // Wait for modal to close
-    await this.page.waitForSelector('[role="dialog"]', { state: 'hidden' });
+    await this.page.waitForSelector('[role="dialog"]', { state: "hidden" });
   }
 
   async isVisible(): Promise<boolean> {

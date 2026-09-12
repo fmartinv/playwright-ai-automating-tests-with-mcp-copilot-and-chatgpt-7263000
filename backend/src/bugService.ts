@@ -24,7 +24,12 @@ export type CreateBugResult =
   | { success: true; bug: Bug }
   | {
       success: false;
-      code: "BLANK_TITLE" | "BLANK_SEVERITY" | "BLANK_OWNER" | "BLANK_DESCRIPTION" | "INVALID_SEVERITY";
+      code:
+        | "BLANK_TITLE"
+        | "BLANK_SEVERITY"
+        | "BLANK_OWNER"
+        | "BLANK_DESCRIPTION"
+        | "INVALID_SEVERITY";
     };
 
 export interface UpdateBugInput extends BugInput {
@@ -37,7 +42,13 @@ export type UpdateBugResult =
   | { success: false; code: "NOT_FOUND" }
   | {
       success: false;
-      code: "BLANK_TITLE" | "BLANK_SEVERITY" | "BLANK_OWNER" | "BLANK_DESCRIPTION" | "INVALID_SEVERITY" | "INVALID_STATE";
+      code:
+        | "BLANK_TITLE"
+        | "BLANK_SEVERITY"
+        | "BLANK_OWNER"
+        | "BLANK_DESCRIPTION"
+        | "INVALID_SEVERITY"
+        | "INVALID_STATE";
     };
 
 const SEVERITIES: Severity[] = ["HIGH", "MID", "LOW"];
@@ -82,9 +93,18 @@ export function createBug(input: BugInput): CreateBugResult {
  */
 export function getBug(id: number): Bug | null {
   const row = db
-    .prepare("SELECT id, title, severity, owner, description, state FROM bugs WHERE id = ?")
+    .prepare(
+      "SELECT id, title, severity, owner, description, state FROM bugs WHERE id = ?"
+    )
     .get(id) as
-    | { id: number; title: string; severity: string; owner: string; description: string; state: string }
+    | {
+        id: number;
+        title: string;
+        severity: string;
+        owner: string;
+        description: string;
+        state: string;
+      }
     | undefined;
   if (!row) return null;
   return {
@@ -127,7 +147,9 @@ export function updateBug(id: number, input: UpdateBugInput): UpdateBugResult {
 /**
  * Delete a bug by id. Returns NOT_FOUND if the bug does not exist.
  */
-export function deleteBug(id: number): { success: true } | { success: false; code: "NOT_FOUND" } {
+export function deleteBug(
+  id: number
+): { success: true } | { success: false; code: "NOT_FOUND" } {
   const existing = getBug(id);
   if (!existing) return { success: false, code: "NOT_FOUND" };
   db.prepare("DELETE FROM bugs WHERE id = ?").run(id);
@@ -139,7 +161,9 @@ export function deleteBug(id: number): { success: true } | { success: false; cod
  */
 export function listBugs(): Bug[] {
   const rows = db
-    .prepare("SELECT id, title, severity, owner, description, state FROM bugs ORDER BY id")
+    .prepare(
+      "SELECT id, title, severity, owner, description, state FROM bugs ORDER BY id"
+    )
     .all() as Array<{
     id: number;
     title: string;

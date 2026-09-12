@@ -9,7 +9,11 @@ interface TitleBarProps {
   onSearchChange?: (value: string) => void;
 }
 
-export function TitleBar({ onNewBug, searchValue = "", onSearchChange }: TitleBarProps) {
+export function TitleBar({
+  onNewBug,
+  searchValue = "",
+  onSearchChange,
+}: TitleBarProps) {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const showSearch = onSearchChange != null;
@@ -32,7 +36,9 @@ export function TitleBar({ onNewBug, searchValue = "", onSearchChange }: TitleBa
             className="block"
           />
         </div>
-        <h1 className="text-3xl font-bold text-stone-800 truncate">BuggyBoard</h1>
+        <h1 className="text-3xl font-bold text-stone-800 truncate">
+          BuggyBoard
+        </h1>
       </div>
       <div className="flex items-center gap-3 flex-shrink-0">
         {showSearch && (

@@ -17,9 +17,9 @@ All product and engineering context **shall** live in Markdown under `specs/`. N
 |                           | `product/glossary.md` – Domain terms (Bug, Board, User).                                                 |
 |                           | `product/braindump.md` – Raw intentions and decisions (source of "why").                                 |
 | **`specs/features/*.md`** | One spec per feature: user stories, Gherkin, acceptance criteria.                                        |
-| **`specs/design/`**       | UI/UX design context: color theme, typography, spacing, and other visual or interaction rules.          |
-|                           | `design/theme.md` – Primary color (Savannah Beige), palette, and other theme tokens.                   |
-| **`specs/engineering/`**  | Tech stack, coding standards, development process, folder structure, and other conventions.          |
+| **`specs/design/`**       | UI/UX design context: color theme, typography, spacing, and other visual or interaction rules.           |
+|                           | `design/theme.md` – Primary color (Savannah Beige), palette, and other theme tokens.                     |
+| **`specs/engineering/`**  | Tech stack, coding standards, development process, folder structure, and other conventions.              |
 |                           | `engineering/tech-stack.md` – Stack and constraints.                                                     |
 |                           | `engineering/coding-standards.md` – Style, DDD, service layer, errors/linting.                           |
 |                           | `engineering/development-process.md` – Spec-first, feature-by-feature, review pauses, progress tracking. |

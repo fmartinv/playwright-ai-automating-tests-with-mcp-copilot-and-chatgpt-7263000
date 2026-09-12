@@ -6,9 +6,10 @@ This is the repository for the LinkedIn Learning course `Playwright with AI: Age
 
 _See the readme file in the main branch for updated instructions and information._
 
-Modern test automation demands speed, reliability, and the ability to adapt as applications evolve. This course is designed for QA test automation engineers who are responsible for end-to-end, cross-browser automation in CI/CD environments, as well as web developers who want to automate tests to protect their code. Join instructor Andrew Knight as he shows you how to build stable Playwright tests that run consistently across browsers and environments, then enhance your workflows with AI-powered test  generation and self-healing techniques that reduce flakiness and maintenance time. Along the way, you'll also learn how to optimize test execution, apply predictive test selection, and integrate Playwright into CI/CD pipelines for continuous testing and faster releases.
+Modern test automation demands speed, reliability, and the ability to adapt as applications evolve. This course is designed for QA test automation engineers who are responsible for end-to-end, cross-browser automation in CI/CD environments, as well as web developers who want to automate tests to protect their code. Join instructor Andrew Knight as he shows you how to build stable Playwright tests that run consistently across browsers and environments, then enhance your workflows with AI-powered test generation and self-healing techniques that reduce flakiness and maintenance time. Along the way, you'll also learn how to optimize test execution, apply predictive test selection, and integrate Playwright into CI/CD pipelines for continuous testing and faster releases.
 
 ## Learning Objectives
+
 - Build reliable end‑to‑end Playwright tests across browsers and environments.
 - Create AI‑enhanced, self‑healing test scripts that adapt to UI changes.
 - Generate and refine test cases from natural‑language prompts.
@@ -16,7 +17,6 @@ Modern test automation demands speed, reliability, and the ability to adapt as a
 ## Overview
 
 Course lessons will teach how to automate **Playwright tests with AI** that cover behaviors in a web app named **BuggyBoard**. This repository contains the code for the web app as well as the example test code created during the course. You will work within this repository as you progress through the course. You will need a [GitHub account](https://github.com/signup) to run codespaces, and you will need an AI coding agent like [GitHub Copilot](https://github.com/features/copilot).
-
 
 ### BuggyBoard Web App
 
@@ -27,7 +27,6 @@ Course lessons will teach how to automate **Playwright tests with AI** that cove
 - with a React frontend
 - and an Express backend
 - and a SQLite database
-
 
 ### Example Code Branches
 
@@ -42,7 +41,6 @@ Some branches will have a beginning and an end state. These are marked with the 
 
 You can use the branch pop-up menu in GitHub to switch to a specific branch and take a look at the course at that stage, or you can add `/tree/BRANCH_NAME` to the URL to go to the branch you want to access.
 
-
 #### Possible Errors
 
 When switching from one exercise files branch to the next after making changes to the files, you may get a message like this:
@@ -55,8 +53,7 @@ When switching from one exercise files branch to the next after making changes t
 
 To resolve this issue:  
 Add changes to git using this command: `git add .`  
-Commit changes using this command: `git commit -m "some message"`  
-
+Commit changes using this command: `git commit -m "some message"`
 
 ## Usage
 
@@ -65,11 +62,9 @@ There are two ways to use this repository:
 1. Using [GitHub Codespaces](https://docs.github.com/en/codespaces/quickstart) (recommended)
 2. Forking, cloning, and running the repository locally on your machine (advanced)
 
-
 ### Codespaces
 
 Running the project in a GitHub codespace is the simpler, recommended path. It includes all the prerequisites needed to start the course. The course videos are recorded using a codespace, so it will be easier for you to follow along if you use a codespace as well. The course introduction section includes a video showing how to load the repository in GitHub Codespaces and run it.
-
 
 ### Local Environment
 
@@ -85,7 +80,6 @@ To run the project locally:
 
 Please read [`SETUP.md`](SETUP.md) for full instructions.
 
-
 ## AI Coding Agents
 
 You will need an AI coding agent for this course for driving Playwright's tools, agents, and skills.
@@ -94,7 +88,7 @@ The recommended coding agent is **GitHub Copilot**. It works out of the box with
 
 You could use other coding agents like **Claude Code** or **Cursor** if you choose to run the project locally, but this is _not recommended_ unless you are already very comfortable with your coding agent of choice. You will need to set them up on your own. Oftentimes you can use a free tier or a trial period, which should be sufficient for the scope of this course. However, the course videos will teach proper AI setup _only for Copilot_. They do **not** teach the different configurations required for Cursor or Claude. Trying to use coding agents other than Copilot could cause confusion and breakages.
 
-## Instructor 
+## Instructor
 
 Andrew Knight
 

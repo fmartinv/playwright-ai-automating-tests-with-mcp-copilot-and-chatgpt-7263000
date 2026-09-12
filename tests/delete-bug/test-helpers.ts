@@ -1,33 +1,33 @@
-import { Page, expect } from '@playwright/test';
-import { BoardPage } from '../pages/BoardPage';
-import { CreateBugModal } from '../pages/CreateBugModal';
-import { EditBugModal } from '../pages/EditBugModal';
+import { Page, expect } from "@playwright/test";
+import { BoardPage } from "../pages/BoardPage";
+import { CreateBugModal } from "../pages/CreateBugModal";
+import { EditBugModal } from "../pages/EditBugModal";
 
 export async function createBug(
   page: Page,
   title: string,
   boardPage: BoardPage,
-  createBugModal: CreateBugModal,
+  createBugModal: CreateBugModal
 ) {
   await boardPage.clickNewBugButton();
   await expect(createBugModal.dialog).toBeVisible();
   await createBugModal.fillBugForm({
     title,
-    severity: 'mid',
-    owner: 'tester',
-    description: 'created by test',
+    severity: "mid",
+    owner: "tester",
+    description: "created by test",
   });
   await createBugModal.submit();
 
   const row = page.locator('table[aria-label="Bugs"] >> text=' + title).first();
-  await row.waitFor({ state: 'visible', timeout: 5000 });
+  await row.waitFor({ state: "visible", timeout: 5000 });
 }
 
 export async function deleteBugIfExists(
   page: Page,
   title: string,
   boardPage: BoardPage,
-  editBugModal: EditBugModal,
+  editBugModal: EditBugModal
 ) {
   const locator = page.locator('table[aria-label="Bugs"] >> text=' + title);
   const count = await locator.count();

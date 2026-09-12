@@ -1,7 +1,7 @@
-import { test, expect } from '../fixtures/pages';
-import { createBug, deleteBugIfExists } from './test-helpers';
+import { test, expect } from "../fixtures/pages";
+import { createBug, deleteBugIfExists } from "./test-helpers";
 
-test.describe('Delete Bug - cancel retains bug', () => {
+test.describe("Delete Bug - cancel retains bug", () => {
   let title: string;
 
   test.beforeEach(async ({ page, loginPage, boardPage, createBugModal }) => {
@@ -14,7 +14,11 @@ test.describe('Delete Bug - cancel retains bug', () => {
     await deleteBugIfExists(page, title, boardPage, editBugModal);
   });
 
-  test('should_not_delete_when_cancelled', async ({ page, boardPage, editBugModal }) => {
+  test("should_not_delete_when_cancelled", async ({
+    page,
+    boardPage,
+    editBugModal,
+  }) => {
     // Act
     await boardPage.clickBugByTitle(title);
     await expect(editBugModal.dialog).toBeVisible();
@@ -23,7 +27,9 @@ test.describe('Delete Bug - cancel retains bug', () => {
 
     // Assert
     await expect(editBugModal.dialog).toBeVisible();
-    const titleLocator = page.locator('table[aria-label="Bugs"] >> text=' + title);
+    const titleLocator = page.locator(
+      'table[aria-label="Bugs"] >> text=' + title
+    );
     await expect(titleLocator).toHaveCount(1);
 
     // Cleanup state for afterEach

@@ -26,6 +26,7 @@ Define end-to-end and edge-case tests for the BuggyBoard backend API. The plan c
 ## 1. GET /api/health
 
 ### 1.1 Positive
+
 - Request: `GET /api/health`
 - Expected response: `200`
 - Response body:
@@ -34,6 +35,7 @@ Define end-to-end and edge-case tests for the BuggyBoard backend API. The plan c
   - `database: "connected"` when DB connection is available
 
 ### 1.2 Negative
+
 - No negative request scenarios are defined in code for this endpoint, but the test should assert stable behavior even if DB is unavailable by verifying `database` becomes `error` when DB query fails.
 
 ---
@@ -41,12 +43,14 @@ Define end-to-end and edge-case tests for the BuggyBoard backend API. The plan c
 ## 2. POST /api/login
 
 ### 2.1 Positive
+
 - Valid credentials
   - Request body: `{ "username": "<valid>", "password": "<valid>" }`
   - Expected response: `200`
   - Response body: `{ "username": "<valid>" }`
 
 ### 2.2 Negative
+
 - Missing credentials
   - Request body: `{}`
   - Expected response: `400`
@@ -73,12 +77,14 @@ Define end-to-end and edge-case tests for the BuggyBoard backend API. The plan c
 ## 3. GET /api/bugs
 
 ### 3.1 Positive
+
 - Request: `GET /api/bugs`
 - Expected response: `200`
 - Response body: array of bug objects
 - Each bug object includes: `id`, `title`, `severity`, `owner`, `description`, `state`
 
 ### 3.2 Negative
+
 - No explicit negative failure path exists in code. The test should verify that an empty database returns `[]` and that the endpoint consistently returns JSON.
 
 ---
@@ -86,6 +92,7 @@ Define end-to-end and edge-case tests for the BuggyBoard backend API. The plan c
 ## 4. POST /api/bugs
 
 ### 4.1 Positive
+
 - Create a new bug with valid data
   - Request body:
     - `title`: non-empty string
@@ -100,6 +107,7 @@ Define end-to-end and edge-case tests for the BuggyBoard backend API. The plan c
     - `state`: `OPEN`
 
 ### 4.2 Negative
+
 - Blank title
   - Request body: missing or empty `title`
   - Expected response: `400`
@@ -131,11 +139,13 @@ Define end-to-end and edge-case tests for the BuggyBoard backend API. The plan c
 ## 5. GET /api/bugs/:id
 
 ### 5.1 Positive
+
 - Request: `GET /api/bugs/:id` with existing bug ID
 - Expected response: `200`
 - Response body is the bug object with matching `id`
 
 ### 5.2 Negative
+
 - Invalid ID format
   - Request: `GET /api/bugs/abc`
   - Expected response: `400`
@@ -152,6 +162,7 @@ Define end-to-end and edge-case tests for the BuggyBoard backend API. The plan c
 ## 6. PUT /api/bugs/:id
 
 ### 6.1 Positive
+
 - Update existing bug with valid payload
   - Request body includes all fields:
     - `title`: non-empty string
@@ -165,6 +176,7 @@ Define end-to-end and edge-case tests for the BuggyBoard backend API. The plan c
     - `state`: uppercase `OPEN`/`CLOSED`
 
 ### 6.2 Negative
+
 - Invalid ID format
   - Request: `PUT /api/bugs/abc`
   - Expected response: `400`
@@ -211,6 +223,7 @@ Define end-to-end and edge-case tests for the BuggyBoard backend API. The plan c
 ## 7. DELETE /api/bugs/:id
 
 ### 7.1 Positive
+
 - Delete an existing bug by ID
   - Request: `DELETE /api/bugs/:id`
   - Expected response: `204`
@@ -218,6 +231,7 @@ Define end-to-end and edge-case tests for the BuggyBoard backend API. The plan c
   - Verifying the bug is removed by a subsequent `GET /api/bugs/:id` returning `404`
 
 ### 7.2 Negative
+
 - Invalid ID format
   - Request: `DELETE /api/bugs/abc`
   - Expected response: `400`
