@@ -28,5 +28,7 @@ test-results/
 # Playwright artifacts
 playwright/videos/
 playwright/screenshots/
+playwright-videos/
+playwright-screenshots/
 # Playwright CLI output (may contain credentials)
 .playwright-cli/

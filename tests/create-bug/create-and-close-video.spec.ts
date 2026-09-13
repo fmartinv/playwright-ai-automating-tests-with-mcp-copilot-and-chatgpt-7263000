@@ -1,70 +1,56 @@
-import { test, expect } from "@playwright/test";
-import { mkdirSync, readFileSync, existsSync } from "fs";
+import { test, expect } from "../fixtures/pages";
+import { mkdirSync, existsSync } from "fs";
 import { join } from "path";
-import { LoginPage } from "../pages/LoginPage";
-import { BoardPage } from "../pages/BoardPage";
-import { CreateBugModal } from "../pages/CreateBugModal";
+
+let createdTitle = "";
 
 test("create a bug then edit it to Closed and record a video", async ({
-  browser,
-}, testInfo) => {
+  videoPage,
+  videoLoginPage,
+  videoBoardPage,
+  videoCreateBugModal,
+  videoEditBugModal,
+}) => {
   const videosDir = join(process.cwd(), "playwright-videos");
   mkdirSync(videosDir, { recursive: true });
 
-  const context = await browser.newContext({
-    recordVideo: { dir: videosDir, size: { width: 1280, height: 720 } },
-  });
-  const page = await context.newPage();
+  await videoLoginPage.loginWithFirstUser();
 
-  // Read credentials from users.json
-  const usersPath = join(process.cwd(), "users.json");
-  const usersRaw = readFileSync(usersPath, "utf-8");
-  const users = JSON.parse(usersRaw) as Array<{
-    username: string;
-    password: string;
-  }>;
-  const user = users[0];
+  await videoBoardPage.clickNewBugButton();
 
-  const login = new LoginPage(page);
-  await login.goto();
-  await login.login(user.username, user.password);
-
-  const board = new BoardPage(page);
-  await board.clickNewBugButton();
-
-  const createModal = new CreateBugModal(page);
   const title = `e2e video bug ${Date.now()}`;
-  await createModal.fillBugForm({
+  createdTitle = title;
+  await videoCreateBugModal.fillBugForm({
     title,
     severity: "mid",
-    owner: user.username,
+    owner: "buggy",
     description: "Created by automated video test",
   });
-  await createModal.submit();
+  await videoCreateBugModal.submit();
 
-  const row = await board.getBugRowByTitle(title);
+  const row = await videoBoardPage.getBugRowByTitle(title);
   await expect(row).toBeVisible();
 
   // Open the bug for editing
-  await board.clickBugByTitle(title);
-  await page.waitForSelector('[role="dialog"]');
+  await videoBoardPage.clickBugByTitle(title);
+  await expect(videoEditBugModal.dialog).toBeVisible();
 
   // Change state to Closed using the edit modal select
-  const stateSelect = page.locator("#edit-bug-state");
-  await stateSelect.selectOption({ value: "closed" });
+  await videoEditBugModal.setState("closed");
 
   // Save
-  await page.getByRole("button", { name: "Save" }).click();
-  await page.waitForSelector('[role="dialog"]', { state: "hidden" });
+  await videoEditBugModal.save();
 
   // Show Closed bugs
-  await page.getByRole("button", { name: "Closed" }).click();
-  await page.waitForTimeout(500);
+  await videoBoardPage.showClosedBugs();
 
   // Close the page to finalize the video
-  await page.close();
-  const videoPath = await page.video()!.path();
-  await context.close();
+  await videoPage.close();
+  const video = videoPage.video();
+  if (!video) {
+    throw new Error("Expected the video fixture to record a video.");
+  }
+  const videoPath = await video.path();
 
   // Assert the video file exists
   expect(videoPath).toBeTruthy();
@@ -72,4 +58,13 @@ test("create a bug then edit it to Closed and record a video", async ({
 
   // Log path for visibility in test output
   console.log("Recorded video:", videoPath);
+});
+
+test.afterEach(async ({ request }) => {
+  if (!createdTitle) return;
+  const response = await request.get("/api/bugs");
+  const bugs = (await response.json()) as Array<{ id: number; title: string }>;
+  const createdBug = bugs.find((bug) => bug.title === createdTitle);
+  if (createdBug) await request.delete(`/api/bugs/${createdBug.id}`);
+  createdTitle = "";
 });

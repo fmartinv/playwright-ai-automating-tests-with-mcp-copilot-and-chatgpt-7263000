@@ -15,7 +15,6 @@ test.describe("Delete Bug - cancel retains bug", () => {
   });
 
   test("should_not_delete_when_cancelled", async ({
-    page,
     boardPage,
     editBugModal,
   }) => {
@@ -23,14 +22,13 @@ test.describe("Delete Bug - cancel retains bug", () => {
     await boardPage.clickBugByTitle(title);
     await expect(editBugModal.dialog).toBeVisible();
     await editBugModal.openDeleteConfirmation();
+    await expect(editBugModal.confirmationDialog).toBeVisible();
     await editBugModal.cancelDeleteConfirmation();
 
     // Assert
+    await expect(editBugModal.confirmationDialog).toBeHidden();
     await expect(editBugModal.dialog).toBeVisible();
-    const titleLocator = page.locator(
-      'table[aria-label="Bugs"] >> text=' + title
-    );
-    await expect(titleLocator).toHaveCount(1);
+    await expect(await boardPage.getBugRowByTitle(title)).toHaveCount(1);
 
     // Cleanup state for afterEach
     await editBugModal.cancel();

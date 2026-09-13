@@ -15,19 +15,19 @@ test.describe("Delete Bug - from details view", () => {
   });
 
   test("should_delete_from_details_view", async ({
-    page,
     boardPage,
     editBugModal,
   }) => {
     // Act - open details (row click)
     await boardPage.clickBugByTitle(title);
     await expect(editBugModal.dialog).toBeVisible();
-    await editBugModal.delete();
+    await editBugModal.openDeleteConfirmation();
+    await expect(editBugModal.confirmationDialog).toBeVisible();
+    await editBugModal.confirmDeletion();
 
     // Assert
-    const titleLocator = page.locator(
-      'table[aria-label="Bugs"] >> text=' + title
-    );
-    await expect(titleLocator).toHaveCount(0);
+    await expect(editBugModal.confirmationDialog).toBeHidden();
+    await expect(editBugModal.dialog).toBeHidden();
+    await expect(await boardPage.getBugRowByTitle(title)).toHaveCount(0);
   });
 });

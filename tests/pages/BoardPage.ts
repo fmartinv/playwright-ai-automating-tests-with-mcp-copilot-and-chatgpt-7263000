@@ -21,6 +21,10 @@ export class BoardPage {
     await this.page.goto("/board");
   }
 
+  async reload() {
+    await this.page.reload();
+  }
+
   async clickNewBugButton() {
     await this.newBugButton.click();
   }
@@ -31,6 +35,10 @@ export class BoardPage {
 
   async clearSearch() {
     await this.clearSearchButton.click();
+  }
+
+  async showClosedBugs() {
+    await this.page.getByRole("button", { name: "Closed" }).click();
   }
 
   async getBugRowByTitle(title: string): Promise<Locator> {

@@ -15,19 +15,20 @@ test.describe("Delete Bug - create then delete", () => {
   });
 
   test("should_create_then_delete_bug", async ({
-    page,
     boardPage,
     editBugModal,
   }) => {
     // Act
     await boardPage.clickBugByTitle(title);
     await expect(editBugModal.dialog).toBeVisible();
-    await editBugModal.delete();
+    await expect(editBugModal.deleteButton).toBeVisible();
+    await editBugModal.openDeleteConfirmation();
+    await expect(editBugModal.confirmationDialog).toBeVisible();
+    await editBugModal.confirmDeletion();
 
     // Assert
-    const titleLocator = page.locator(
-      'table[aria-label="Bugs"] >> text=' + title
-    );
-    await expect(titleLocator).toHaveCount(0);
+    await expect(editBugModal.confirmationDialog).toBeHidden();
+    await expect(editBugModal.dialog).toBeHidden();
+    await expect(await boardPage.getBugRowByTitle(title)).toHaveCount(0);
   });
 });
