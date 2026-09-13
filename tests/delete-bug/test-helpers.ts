@@ -1,10 +1,9 @@
-import { Page, expect } from "@playwright/test";
+import { expect } from "@playwright/test";
 import { BoardPage } from "../pages/BoardPage";
 import { CreateBugModal } from "../pages/CreateBugModal";
 import { EditBugModal } from "../pages/EditBugModal";
 
 export async function createBug(
-  page: Page,
   title: string,
   boardPage: BoardPage,
   createBugModal: CreateBugModal
@@ -19,17 +18,16 @@ export async function createBug(
   });
   await createBugModal.submit();
 
-  const row = page.locator('table[aria-label="Bugs"] >> text=' + title).first();
+  const row = await boardPage.getBugRowByTitle(title);
   await row.waitFor({ state: "visible", timeout: 5000 });
 }
 
 export async function deleteBugIfExists(
-  page: Page,
   title: string,
   boardPage: BoardPage,
   editBugModal: EditBugModal
 ) {
-  const locator = page.locator('table[aria-label="Bugs"] >> text=' + title);
+  const locator = await boardPage.getBugRowByTitle(title);
   const count = await locator.count();
   if (count === 0) return;
 

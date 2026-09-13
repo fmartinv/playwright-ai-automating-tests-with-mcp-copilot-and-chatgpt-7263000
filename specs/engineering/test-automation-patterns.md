@@ -103,12 +103,10 @@ Use **semantic locators** in order of preference:
 ### Test Pattern: Arrange-Act-Assert
 
 ```typescript
-import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
+import { test, expect } from "../fixtures/pages";
 
-test("user can log in with valid credentials", async ({ page }) => {
+test("user can log in with valid credentials", async ({ loginPage, page }) => {
   // Arrange
-  const loginPage = new LoginPage(page);
   await loginPage.goto();
 
   // Act
@@ -136,19 +134,21 @@ Each test is **atomic** – it focuses on one behavior and does not depend on st
 When a workflow spans multiple pages, use multiple page objects in the test:
 
 ```typescript
-test("user creates a bug and views it on the board", async ({ page }) => {
-  // Arrange
-  const boardPage = new BoardPage(page);
-  const modalPage = new CreateBugModal(page);
+import { test, expect } from "../fixtures/pages";
 
+test("user creates a bug and views it on the board", async ({
+  boardPage,
+  createBugModal,
+}) => {
+  // Arrange
   // Act
   await boardPage.goto();
   await boardPage.clickCreateButton();
-  await modalPage.fillBugForm({
+  await createBugModal.fillBugForm({
     title: "Login button broken",
     severity: "high",
   });
-  await modalPage.clickSubmit();
+  await createBugModal.clickSubmit();
 
   // Assert
   await expect(boardPage.getBugRow("Login button broken")).toBeVisible();
@@ -190,6 +190,43 @@ export class CreateBugModal {
 
 **Rule:** All tests must obtain page object instances through fixtures, not by constructing them directly.
 
+### Dedicated `fixtures` section
+
+All custom Playwright fixtures must be stored in the dedicated `tests/fixtures/` directory:
+
+```
+tests/
+  fixtures/
+    pages.ts       # shared custom test object and page-object fixtures
+  pages/
+    LoginPage.ts
+    BoardPage.ts
+    CreateBugModal.ts
+    EditBugModal.ts
+    TitleBar.ts
+```
+
+The fixture module in `tests/fixtures/pages.ts` is the project's custom test object. It must be built with Playwright's `test.extend()` pattern:
+
+1. Import `test as base` from `@playwright/test`.
+2. Declare a TypeScript fixture type for every page object.
+3. Create each page object inside its fixture callback using the built-in `page` fixture.
+4. Call `await use(pageObject)` to provide it to the test.
+5. Put fixture-specific cleanup after `await use(...)` when cleanup is required.
+6. Export the extended `test` and re-export `expect` from the fixture module.
+
+Page-object constructors belong in `tests/fixtures/`, never in test files. Fixtures are test-scoped by default, isolated between tests, lazy, composable, and automatically torn down by Playwright around the `await use(...)` boundary.
+
+### Mandatory fixture policy
+
+- Create one fixture for every page object class under `tests/pages/`.
+- Register every page-object fixture in the shared `tests/fixtures/pages.ts` fixture file.
+- Tests must import `test` from the shared fixture module and request page objects through test callback parameters.
+- Tests must call page-object methods and locators supplied by fixtures; they must never call page-object constructors such as `new LoginPage(page)` or `new BoardPage(page)`.
+- When a test needs multiple page objects, request all of them as fixtures rather than constructing them inside the test.
+- Add a page-object fixture before writing or updating tests that use a new page object.
+- Direct browser interactions belong in fixtures and page-object classes, not duplicated in test bodies.
+
 Fixtures provide automatic teardown, proper lifecycle management, and consistent page object initialization across all tests. This prevents memory leaks, ensures isolation, and makes test code cleaner.
 
 ### Why Fixtures Over Direct Construction?
@@ -202,7 +239,7 @@ Fixtures provide automatic teardown, proper lifecycle management, and consistent
 
 ### Fixture File Structure
 
-Create a single fixture file under `tests/fixtures/` for all page object fixtures:
+Create the shared fixture module under the dedicated `tests/fixtures/` section:
 
 ```typescript
 // tests/fixtures/pages.ts
@@ -271,8 +308,19 @@ Notice:
 
 - Import `test` from `../fixtures/pages`, not from `@playwright/test`
 - Destructure fixtures from test parameters: `{ loginPage, page }`
-- No manual instantiation: `const loginPage = new LoginPage(page)` ✅ Removed
+- No manual instantiation: page objects are provided as fixture parameters ✅
 - Tests are cleaner and focus purely on behavior
+
+### Fixture usage checklist
+
+Before adding or modifying a Playwright test, verify:
+
+- The test imports `test` from `tests/fixtures/pages.ts` using the correct relative path.
+- Every page object used by the test is listed as a test callback parameter.
+- No page-object class is imported into the test solely to call `new`.
+- No page-object constructor is called from a test, hook, or test helper.
+- New page objects have a corresponding fixture in `tests/fixtures/pages.ts`.
+- Setup and teardown that belong to a page object are implemented inside its fixture or page-object class.
 
 ### Fixture Parameters and Dependencies
 
@@ -363,6 +411,8 @@ createModalOpen: async ({ page, boardPage }, use) => {
 | ❌ Don't Do This                                   | ✅ Do This Instead                                       |
 | -------------------------------------------------- | -------------------------------------------------------- |
 | `const loginPage = new LoginPage(page);`           | Import from `../fixtures/pages` and request as parameter |
+| `const boardPage = new BoardPage(page);`           | Request `{ boardPage }` from the fixture                |
+| `const modal = new CreateBugModal(page);`          | Request `{ createBugModal }` from the fixture            |
 | Instantiate in every test                          | Define once in fixture, reuse everywhere                 |
 | Manual cleanup in test                             | Fixtures handle automatic teardown                       |
 | Mixed import sources (`@playwright/test` + custom) | Always import `test` from `../fixtures/pages`            |
