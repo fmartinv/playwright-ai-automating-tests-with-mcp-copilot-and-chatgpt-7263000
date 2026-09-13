@@ -14,6 +14,8 @@ export class CreateBugModal {
   readonly severitySelect: Locator;
   readonly ownerInput: Locator;
   readonly descriptionInput: Locator;
+  readonly closeButton: Locator;
+  readonly validationErrors: Locator;
   readonly saveButton: Locator;
   readonly cancelButton: Locator;
 
@@ -24,6 +26,8 @@ export class CreateBugModal {
     this.severitySelect = this.dialog.getByLabel("Severity");
     this.ownerInput = this.dialog.getByLabel("Owner");
     this.descriptionInput = this.dialog.getByLabel("Description");
+    this.closeButton = this.dialog.getByRole("button", { name: "Close" });
+    this.validationErrors = this.dialog.getByRole("alert");
     this.saveButton = this.dialog.getByRole("button", { name: "Save" });
     this.cancelButton = this.dialog.getByRole("button", { name: "Cancel" });
   }
@@ -51,6 +55,27 @@ export class CreateBugModal {
     await this.cancelButton.click();
     // Wait for modal to close
     await this.page.waitForSelector('[role="dialog"]', { state: "hidden" });
+  }
+
+  async close() {
+    await this.closeButton.click();
+    await this.dialog.waitFor({ state: "hidden" });
+  }
+
+  async pressEscape() {
+    await this.page.keyboard.press("Escape");
+    await this.dialog.waitFor({ state: "hidden" });
+  }
+
+  async clickBackdrop() {
+    const box = await this.dialog.boundingBox();
+    if (!box) throw new Error("Create modal is not rendered.");
+    await this.page.mouse.click(box.x - 10, box.y - 10);
+  }
+
+  async submitExpectingValidation() {
+    await this.saveButton.click();
+    await this.validationErrors.waitFor({ state: "visible" });
   }
 
   async isVisible(): Promise<boolean> {

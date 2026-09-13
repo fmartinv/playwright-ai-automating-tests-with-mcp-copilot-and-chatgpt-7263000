@@ -41,7 +41,7 @@ function severityBadgeClass(severity: string): string {
  */
 function normalizeForSearch(text: string): string {
   const lower = text.toLowerCase().trim();
-  const noPunctuation = lower.replace(/\p{P}/gu, " ");
+  const noPunctuation = lower.replace(/\p{P}/gu, "");
   return noPunctuation.replace(/\s+/g, " ").trim();
 }
 

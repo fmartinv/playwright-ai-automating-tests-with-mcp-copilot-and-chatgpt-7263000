@@ -4,6 +4,7 @@ import { BoardPage } from "../pages/BoardPage";
 import { CreateBugModal } from "../pages/CreateBugModal";
 import { EditBugModal } from "../pages/EditBugModal";
 import { TitleBar } from "../pages/TitleBar";
+import { DocumentPage } from "../pages/DocumentPage";
 import type { BrowserContext, Page } from "@playwright/test";
 
 // Declare fixture types for TypeScript support
@@ -13,6 +14,7 @@ type PagesFixtures = {
   createBugModal: CreateBugModal;
   editBugModal: EditBugModal;
   titleBar: TitleBar;
+  documentPage: DocumentPage;
   videoPage: Page;
   videoLoginPage: LoginPage;
   videoBoardPage: BoardPage;
@@ -45,6 +47,10 @@ export const test = base.extend<PagesFixtures>({
 
   titleBar: async ({ page }, use) => {
     await use(new TitleBar(page));
+  },
+
+  documentPage: async ({ page }, use) => {
+    await use(new DocumentPage(page));
   },
 
   videoPage: async ({ browser }, use) => {

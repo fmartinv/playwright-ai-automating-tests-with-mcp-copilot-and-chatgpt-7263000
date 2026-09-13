@@ -4,6 +4,12 @@ export class EditBugModal {
   readonly page: Page;
   readonly dialog: Locator;
   readonly stateSelect: Locator;
+  readonly idInput: Locator;
+  readonly titleInput: Locator;
+  readonly severitySelect: Locator;
+  readonly ownerInput: Locator;
+  readonly descriptionInput: Locator;
+  readonly closeButton: Locator;
   readonly saveButton: Locator;
   readonly deleteButton: Locator;
   readonly cancelButton: Locator;
@@ -14,7 +20,13 @@ export class EditBugModal {
   constructor(page: Page) {
     this.page = page;
     this.dialog = page.getByRole("dialog", { name: /Edit bug/ });
+    this.idInput = this.dialog.getByLabel("ID");
+    this.titleInput = this.dialog.getByLabel("Title");
+    this.severitySelect = this.dialog.getByLabel("Severity");
     this.stateSelect = this.dialog.getByLabel("State");
+    this.ownerInput = this.dialog.getByLabel("Owner");
+    this.descriptionInput = this.dialog.getByLabel("Description");
+    this.closeButton = this.dialog.getByRole("button", { name: "Close" });
     this.saveButton = this.dialog.getByRole("button", {
       name: "Save",
       exact: true,
@@ -58,6 +70,26 @@ export class EditBugModal {
 
   async setState(state: "open" | "closed") {
     await this.stateSelect.selectOption(state);
+  }
+
+  async pressEscape() {
+    await this.page.keyboard.press("Escape");
+    await this.dialog.waitFor({ state: "hidden" });
+  }
+
+  async close() {
+    await this.closeButton.click();
+    await this.dialog.waitFor({ state: "hidden" });
+  }
+
+  async clickBackdrop() {
+    const box = await this.dialog.boundingBox();
+    if (!box) throw new Error("Edit modal is not rendered.");
+    await this.page.mouse.click(box.x - 10, box.y - 10);
+  }
+
+  async isIdReadOnly() {
+    return (await this.idInput.getAttribute("aria-readonly")) === "true";
   }
 
   async save() {
